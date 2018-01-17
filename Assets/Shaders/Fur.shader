@@ -15,10 +15,9 @@
 	SubShader {
 		Tags { "RenderType"="Opaque" }
 		LOD 200
-		
+
 		CGPROGRAM
-		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
-		#define FUR_MULTIPLIER 0.05
+		#pragma surface surf Standard fullforwardshadows
 		#pragma target 3.0
 
 		fixed4 _Color;
@@ -26,41 +25,131 @@
 		half _Glossiness;
 		half _Metallic;
 
-		uniform float _FurLength;
-		uniform float _Cutoff;
-		uniform float _CutoffEnd;
-		uniform float _EdgeFade;
-		uniform fixed3 _Gravity;
-		uniform fixed3 _GravityStrength;
-
-		void vert(inout appdata_full v)
-		{
-			fixed3 direction = lerp(
-				v.normal,
-				_Gravity * _GravityStrength + v.normal * (1 - _GravityStrength),
-				FUR_MULTIPLIER);
-			v.vertex.xyz += direction * _FurLength * FUR_MULTIPLIER * v.color.a;
-		}
-
 		struct Input {
 			float2 uv_MainTex;
-			float3 viewDir;
 		};
 
-		void surf(Input IN, inout SurfaceOutputStandard o)
-		{
+		void surf (Input IN, inout SurfaceOutputStandard o) {
 			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
 			o.Albedo = c.rgb;
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
-
-			o.Alpha = step(lerp(_Cutoff, _CutoffEnd, FUR_MULTIPLIER), c.a);
-
-			float alpha = 1 - (FUR_MULTIPLIER * FUR_MULTIPLIER);
-			alpha += dot(IN.viewDir, o.Normal) - _EdgeFade;
-
-			o.Alpha *= alpha;
+			o.Alpha = c.a;
 		}
+		ENDCG
+		
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.05
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.1
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.15
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.2
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.25
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.3
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.35
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.4
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.45
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.5
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.55
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.6
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.65
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.7
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.75
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.8
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.85
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.9
+		#include "Cg/FurPass.cginc"
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows alpha:blend vertex:vert
+		#define FUR_MULTIPLIER 0.95
+		#include "Cg/FurPass.cginc"
 		ENDCG
 	}
 	FallBack "Diffuse"

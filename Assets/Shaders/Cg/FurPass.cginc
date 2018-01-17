@@ -1,4 +1,3 @@
-#ifndef FUR_MULTIPLIER
 #pragma target 3.0
 
 fixed4 _Color;
@@ -41,5 +40,3 @@ void surf (Input IN, inout SurfaceOutputStandard o)
 
     o.Alpha *= alpha;
 }
-
-#endif
