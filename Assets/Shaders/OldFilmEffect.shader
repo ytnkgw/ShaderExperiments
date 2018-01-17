@@ -43,34 +43,46 @@
 			fixed4 frag (v2f_img i) : COLOR
 			{
 				// Render Tex
-				half2 distortedUV = barrelDistortion(i.uv);
+				//half2 distortedUV = barrelDistortion(i.uv);
+				half2 distortedUV;
 				distortedUV = half2(i.uv.x, i.uv.y + (_RandomValue * _SinTime.z * 0.005));
+
+
 				fixed4 renderTex = tex2D(_MainTex, i.uv);
 
-				// Vignette tex
+				// Vignette Layer
 				fixed vignetteTex = tex2D(_VignetteTex, i.uv);
 
-				// Scratches Tex
+				// Scratches Layer
 				half2 scratchesUV = half2(
 					i.uv.x + (_RandomValue * (_SinTime.z * _ScratchesXSpeed)),
 					i.uv.y + (_RandomValue * (_Time.x * _ScratchesYSpeed))
 				);
 				fixed4 scratchesTex = tex2D(_ScratchesTex, scratchesUV);
 
-				// Dust Tex
+				// Dust Layer
 				half2 dustUV = half2(
 					i.uv.x + (_RandomValue * (_SinTime.z * _dustXSpeed)),
-					i.uv.y + (_RandomValue * (_SinTime.z * _dustYSpeed)),
+					i.uv.y + (_RandomValue * (_SinTime.z * _dustYSpeed))
 				);
 				fixed4 dustTex = tex2D(_DustTex, dustUV);
 
 				// Set Luminosity
-				fixed lum = dot(fixed3(0.299, 0.587, 0.114), renderTex, rgb);
+				fixed lum = dot(fixed3(0.299, 0.587, 0.114), renderTex.rgb);
 
-				fixed4 finalColor = lum + lerp(_SepiaColor, SepiaColor + fixed4(0.1f, 0.1f, 0.1f, 1.0f), _RandomValue);
+				fixed4 finalColor = lum + lerp(_SepiaColor, _SepiaColor + fixed4(0.1f, 0.1f, 0.1f, 1.0f), _RandomValue);
 				finalColor = pow(finalColor, _Contrast);
 
-				// 
+				// Create constant color
+				fixed3 constantWhite = fixed3(1, 1, 1);
+
+				// Composite together all the layer
+				finalColor = lerp(finalColor, finalColor * vignetteTex, _VignetteAmount);
+				finalColor.rgb *= lerp(scratchesTex, constantWhite, _RandomValue);
+				finalColor.rgb *= lerp(dustTex.rgb, constantWhite, (_RandomValue * _SinTime.z));
+				finalColor = lerp(renderTex, finalColor, _EffectAmount);
+
+				return finalColor;
 			}
 			ENDCG
 		}
